@@ -1,0 +1,16 @@
+{
+  "events": [
+    { "id": "evt-001", "title": "Workshop React Dasar", "category": "Workshop", "description": "Belajar komponen dan hooks React bersama komunitas kampus.", "location": "Telkom University", "city": "Bandung", "date": "2026-11-15", "startTime": "09:00", "image": "", "capacity": 100 },
+    { "id": "evt-002", "title": "Seminar Karier Digital", "category": "Seminar", "description": "Kenali peluang karier dan persiapan memasuki industri digital.", "location": "Aula Kampus Merdeka", "city": "Jakarta", "date": "2026-11-20", "startTime": "13:00", "image": "", "capacity": 150 },
+    { "id": "evt-003", "title": "Konser Musik Senja", "category": "Musik", "description": "Pertunjukan akustik dari musisi dan band mahasiswa.", "location": "Taman Budaya", "city": "Yogyakarta", "date": "2026-11-28", "startTime": "17:00", "image": "", "capacity": 200 },
+    { "id": "evt-004", "title": "Lari Pagi Bersama", "category": "Olahraga", "description": "Lari santai lima kilometer untuk semua tingkat kebugaran.", "location": "Lapangan Gasibu", "city": "Bandung", "date": "2026-12-06", "startTime": "06:00", "image": "", "capacity": 80 },
+    { "id": "evt-005", "title": "Pameran Karya Mahasiswa", "category": "Seni", "description": "Pameran ilustrasi, fotografi, dan karya desain mahasiswa.", "location": "Galeri Kreatif", "city": "Surabaya", "date": "2026-12-12", "startTime": "10:00", "image": "", "capacity": 120 },
+    { "id": "evt-006", "title": "Bazar Kuliner Nusantara", "category": "Kuliner", "description": "Jelajahi ragam makanan daerah dari pelaku usaha lokal.", "location": "Alun-Alun Kota", "city": "Semarang", "date": "2026-12-19", "startTime": "11:00", "image": "", "capacity": 300 },
+    { "id": "evt-007", "title": "Aksi Bersih Lingkungan", "category": "Sosial", "description": "Kegiatan relawan membersihkan taman dan memilah sampah.", "location": "Taman Kota", "city": "Bogor", "date": "2027-01-10", "startTime": "07:00", "image": "", "capacity": 50 },
+    { "id": "evt-008", "title": "Kompetisi Ide Bisnis", "category": "Kompetisi", "description": "Presentasikan ide usaha dan dapatkan masukan dari mentor.", "location": "Gedung Inovasi", "city": "Bandung", "date": "2027-01-23", "startTime": "09:30", "image": "", "capacity": 60 }
+  ],
+  "registrations": [
+    { "id": "reg-001", "eventId": "evt-001", "ticketId": "tkt-001", "participantName": "Budi", "participantEmail": "budi@example.com", "registeredAt": "2026-10-20T10:00:00+07:00", "checkedInAt": null },
+    { "id": "reg-002", "eventId": "evt-002", "ticketId": "tkt-002", "participantName": "Siti", "participantEmail": "siti@example.com", "registeredAt": "2026-10-21T14:00:00+07:00", "checkedInAt": null }
+  ]
+}
