@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import TicketCard from '../components/TicketCard.jsx'
 import { useAppData } from '../context/AppDataContext.jsx'
 
 export default function MyTicketsPage() {
@@ -21,9 +22,8 @@ export default function MyTicketsPage() {
             const event = events.find((item) => item.id === registration.eventId)
 
             return (
-              <li key={registration.id} className="rounded-lg border border-slate-200 bg-white p-4 break-words">
-                <h2 className="font-semibold text-teal-800">{event?.title ?? 'Event tidak tersedia'}</h2>
-                <p className="mt-1">{registration.participantName}</p>
+              <li key={registration.id} className="min-w-0">
+                <TicketCard registration={registration} event={event} />
               </li>
             )
           })}
