@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router'
+import TicketValidationModal from '../components/TicketValidationModal.jsx'
 import { useAppData } from '../context/AppDataContext.jsx'
 
 function formatDate(date, startTime) {
@@ -17,6 +18,7 @@ export default function EventDetailPage() {
   const [formError, setFormError] = useState('')
   const [isRegistering, setIsRegistering] = useState(false)
   const [registered, setRegistered] = useState(false)
+  const [showValidationModal, setShowValidationModal] = useState(false)
   const registeredCount = useMemo(
     () => registrations.filter((registration) => registration.eventId === eventId).length,
     [registrations, eventId],
@@ -118,7 +120,13 @@ export default function EventDetailPage() {
             </form>
           </>
         )}
+        <button type="button" onClick={() => setShowValidationModal(true)} className="mt-6 min-h-11 w-full rounded-lg border border-slate-300 px-5 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+          Validasi Tiket Manual
+        </button>
       </aside>
+      {showValidationModal && (
+        <TicketValidationModal activeEventId={event.id} onClose={() => setShowValidationModal(false)} />
+      )}
     </section>
   )
 }
