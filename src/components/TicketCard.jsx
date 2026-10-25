@@ -1,3 +1,5 @@
+import { QRCodeSVG } from 'qrcode.react'
+
 export default function TicketCard({ registration, event }) {
   const isCheckedIn = registration.checkedInAt !== null
 
@@ -28,6 +30,14 @@ export default function TicketCard({ registration, event }) {
           </dd>
         </div>
       </dl>
+      <div className="mt-5 flex justify-center rounded-lg bg-white p-3">
+        <QRCodeSVG
+          value={registration.ticketId}
+          size={160}
+          marginSize={4}
+          title="QR code tiket"
+        />
+      </div>
     </article>
   )
 }
