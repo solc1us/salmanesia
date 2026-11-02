@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import EventCover from '../components/EventCover.jsx'
 
 function formatDate(date, startTime) {
   return new Intl.DateTimeFormat('id-ID', {
@@ -65,13 +66,7 @@ export default function EventDetailPage() {
     <section className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
       <article className="min-w-0">
         <Card className="gap-0 overflow-hidden py-0 shadow-none">
-          {event.image ? (
-            <img src={event.image} alt={`Poster ${event.title}`} className="h-64 w-full object-cover sm:h-80" />
-          ) : (
-            <div className="flex h-64 items-center justify-center bg-gradient-to-br from-teal-900 to-teal-600 p-8 sm:h-80">
-              <span aria-hidden="true" className="text-center text-4xl font-bold tracking-tight text-white/90 break-words">{event.category}</span>
-            </div>
-          )}
+          <EventCover event={event} className="h-80 sm:h-[32rem]" />
           <CardContent className="p-6 sm:p-8">
             <Badge variant="secondary" className="px-3 py-1">{event.category}</Badge>
             <h1 className="mt-4 text-3xl leading-tight tracking-tight break-words sm:text-4xl">{event.title}</h1>
