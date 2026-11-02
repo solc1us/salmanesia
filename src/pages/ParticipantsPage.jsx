@@ -3,6 +3,11 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { useAppData } from '../context/AppDataContext.jsx'
 import QrScanner from '../components/QrScanner.jsx'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 function formatDate(value) {
   if (!value) {
@@ -34,7 +39,7 @@ export default function ParticipantsPage() {
     return (
       <section>
         <h1>Participants & Check-in</h1>
-        <p role="status">Memuat data peserta...</p>
+        <p role="status" className="rounded-xl border border-slate-200 bg-white p-6">Memuat data peserta...</p>
       </section>
     )
   }
@@ -46,7 +51,7 @@ export default function ParticipantsPage() {
 
         <p
           role="alert"
-          className="rounded-lg bg-red-50 p-4 text-red-700"
+          className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-800"
         >
           {error}
         </p>
@@ -58,19 +63,16 @@ export default function ParticipantsPage() {
 
   if (!event) {
     return (
-      <section>
+      <section className="rounded-xl border border-slate-200 bg-white p-8 text-center">
         <h1>Event Tidak Ditemukan</h1>
 
         <p>
           Event yang ingin dikelola tidak tersedia.
         </p>
 
-        <Link
-          to="/creator"
-          className="mt-4 inline-block text-teal-700 hover:underline"
-        >
+        <Button asChild variant="outline" className="mt-6 min-h-11"><Link to="/creator">
           Kembali ke Dashboard
-        </Link>
+        </Link></Button>
       </section>
     )
   }
@@ -144,80 +146,80 @@ export default function ParticipantsPage() {
   }
 
   return (
-    <section className="space-y-8">
-      <div>
-        <Link
-          to="/creator"
-          className="text-sm font-medium text-teal-700 hover:underline"
-        >
+    <section aria-labelledby="participants-title" className="space-y-6">
+      <header>
+        <Button asChild variant="ghost" className="min-h-11"><Link to="/creator">
           ← Kembali ke Dashboard
-        </Link>
+        </Link></Button>
 
-        <h1 className="mt-4 text-3xl font-bold">
+        <h1 id="participants-title" className="mt-4 text-3xl font-bold tracking-tight">
           Participants & Check-in
         </h1>
 
         <p className="text-slate-600">
           Kelola daftar peserta dan verifikasi kehadiran.
         </p>
-      </div>
+      </header>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="text-2xl font-bold">
+      <Card className="gap-0 border-teal-100 bg-teal-50 p-6 shadow-none sm:p-8">
+        <h2 className="text-2xl font-bold tracking-tight text-teal-900 break-words">
           {event.title}
         </h2>
 
-        <p className="mt-2">
-          Lokasi: {event.location}, {event.city}
-        </p>
-
-        <p className="mt-1">
-          Tanggal: {event.date}
-        </p>
-
-        <p className="mt-1">
-          Waktu: {event.startTime}
-        </p>
-
-        <p className="mt-1">
-          Kapasitas: {event.capacity} peserta
-        </p>
-      </div>
+        <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2">
+          <div>
+            <dt className="text-slate-600">Lokasi</dt>
+            <dd className="mt-1 font-medium break-words">{event.location}, {event.city}</dd>
+          </div>
+          <div>
+            <dt className="text-slate-600">Tanggal</dt>
+            <dd className="mt-1 font-medium">{event.date}</dd>
+          </div>
+          <div>
+            <dt className="text-slate-600">Waktu</dt>
+            <dd className="mt-1 font-medium">{event.startTime}</dd>
+          </div>
+          <div>
+            <dt className="text-slate-600">Kapasitas</dt>
+            <dd className="mt-1 font-medium">{event.capacity} peserta</dd>
+          </div>
+        </dl>
+      </Card>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">
+        <Card className="gap-0 p-5 shadow-none">
+          <p className="text-sm text-slate-600">
             Total Peserta
           </p>
 
-          <p className="mt-2 text-3xl font-bold text-slate-900">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900 tabular-nums">
             {totalParticipants}
           </p>
-        </div>
+        </Card>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">
+        <Card className="gap-0 p-5 shadow-none">
+          <p className="text-sm text-slate-600">
             Sudah Check-in
           </p>
 
-          <p className="mt-2 text-3xl font-bold text-teal-700">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-teal-800 tabular-nums">
             {checkedInParticipants}
           </p>
-        </div>
+        </Card>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <p className="text-sm text-slate-500">
+        <Card className="gap-0 p-5 shadow-none">
+          <p className="text-sm text-slate-600">
             Belum Check-in
           </p>
 
-          <p className="mt-2 text-3xl font-bold text-amber-600">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-slate-900 tabular-nums">
             {notCheckedInParticipants}
           </p>
-        </div>
+        </Card>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <Card className="min-w-0 gap-0 p-6 shadow-none">
           <h2 className="text-xl font-bold">
             QR Scanner
           </h2>
@@ -229,9 +231,9 @@ export default function ParticipantsPage() {
           <div className="mt-5">
             <QrScanner onScan={handleCheckIn} />
           </div>
-        </div>
+        </Card>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <Card className="min-w-0 gap-0 p-6 shadow-none">
           <h2 className="text-xl font-bold">
             Manual Check-in
           </h2>
@@ -245,14 +247,14 @@ export default function ParticipantsPage() {
             className="mt-5 space-y-4"
           >
             <div>
-              <label
+              <Label
                 htmlFor="ticket-id"
-                className="mb-2 block text-sm font-medium"
+                className="mb-2"
               >
                 Ticket ID
-              </label>
+              </Label>
 
-              <input
+              <Input
                 id="ticket-id"
                 type="text"
                 value={ticketInput}
@@ -260,18 +262,18 @@ export default function ParticipantsPage() {
                   setTicketInput(e.target.value)
                 }
                 placeholder="Contoh: tkt-001"
-                className="w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-teal-700 focus:outline-2 focus:outline-teal-700"
+                className="min-h-11 bg-white"
               />
             </div>
 
-            <button
+            <Button
               type="submit"
-              className="rounded-lg bg-teal-700 px-5 py-3 font-medium text-white hover:bg-teal-800"
+              className="min-h-11 w-full sm:w-auto"
             >
               Verifikasi & Check-in
-            </button>
+            </Button>
           </form>
-        </div>
+        </Card>
       </div>
 
       {feedback && (
@@ -283,41 +285,41 @@ export default function ParticipantsPage() {
           }
           className={`rounded-xl border p-4 ${
             feedback.type === 'success'
-              ? 'border-teal-200 bg-teal-50 text-teal-800'
-              : 'border-red-200 bg-red-50 text-red-700'
+              ? 'border-teal-200 bg-teal-50 text-teal-900'
+              : 'border-red-200 bg-red-50 text-red-800'
           }`}
         >
           {feedback.message}
         </div>
       )}
 
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <Card className="min-w-0 gap-0 p-5 shadow-none sm:p-6">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-xl font-bold">
+            <h2 className="text-xl font-bold tracking-tight">
               Daftar Peserta
             </h2>
 
-            <p className="text-sm text-slate-500">
+            <p className="mt-1 text-sm text-slate-600">
               {filteredParticipants.length} dari {totalParticipants} peserta
             </p>
           </div>
 
           <div>
-            <label
+            <Label
               htmlFor="participant-search"
-              className="mb-2 block text-sm font-medium"
+              className="mb-2"
             >
               Cari Peserta
-            </label>
+            </Label>
 
-            <input
+            <Input
               id="participant-search"
               type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Nama, email, atau Ticket ID"
-              className="w-full rounded-lg border border-slate-300 px-4 py-2 text-sm sm:w-64"
+              className="min-h-11 bg-white sm:w-64"
             />
           </div>
         </div>
@@ -331,45 +333,46 @@ export default function ParticipantsPage() {
             Peserta tidak ditemukan.
           </p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
-              <thead className="bg-slate-100">
+          <div role="region" aria-label="Tabel peserta" tabIndex={0} className="overflow-x-auto rounded-lg border border-slate-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700">
+            <table className="w-full min-w-[800px] text-left text-sm">
+              <caption className="sr-only">Daftar peserta dan status check-in untuk {event.title}.</caption>
+              <thead className="border-b border-slate-200 bg-slate-50 text-slate-600">
                 <tr>
-                  <th className="px-4 py-3">
+                  <th scope="col" className="px-4 py-3">
                     Nama
                   </th>
 
-                  <th className="px-4 py-3">
+                  <th scope="col" className="px-4 py-3">
                     Email
                   </th>
 
-                  <th className="px-4 py-3">
+                  <th scope="col" className="px-4 py-3">
                     Ticket ID
                   </th>
 
-                  <th className="px-4 py-3">
+                  <th scope="col" className="px-4 py-3">
                     Tanggal Daftar
                   </th>
 
-                  <th className="px-4 py-3">
+                  <th scope="col" className="px-4 py-3">
                     Status
                   </th>
 
-                  <th className="px-4 py-3">
+                  <th scope="col" className="px-4 py-3">
                     Waktu Check-in
                   </th>
                 </tr>
               </thead>
 
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {filteredParticipants.map((participant) => (
                   <tr
                     key={participant.id}
-                    className="border-b border-slate-200"
+                    className="hover:bg-slate-50/70"
                   >
-                    <td className="px-4 py-3 font-medium">
+                    <th scope="row" className="px-4 py-3 font-medium text-slate-900">
                       {participant.participantName}
-                    </td>
+                    </th>
 
                     <td className="px-4 py-3">
                       {participant.participantEmail}
@@ -385,13 +388,13 @@ export default function ParticipantsPage() {
 
                     <td className="whitespace-nowrap px-4 py-3">
                       {participant.checkedInAt ? (
-                        <span className="rounded-full bg-teal-100 px-3 py-1 text-xs font-medium text-teal-700">
+                        <Badge variant="secondary">
                           Checked In
-                        </span>
+                        </Badge>
                       ) : (
-                        <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-700">
+                        <Badge variant="outline" className="text-slate-600">
                           Registered
-                        </span>
+                        </Badge>
                       )}
                     </td>
 
@@ -404,7 +407,7 @@ export default function ParticipantsPage() {
             </table>
           </div>
         )}
-      </div>
+      </Card>
 
       <p className="text-center text-xs text-slate-500">
         Salmanesia Demo Mode - data disimpan secara lokal

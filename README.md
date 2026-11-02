@@ -1,6 +1,14 @@
-# Salmanesia — Phase 1
+# Salmanesia
 
-Fondasi Event Management System untuk tugas kelompok: React + Vite (JavaScript), Tailwind melalui `@tailwindcss/vite`, React Router Declarative Mode, Fetch, Context + useState, dan localStorage. Halaman masih placeholder; UI fitur dikerjakan pada Phase 2.
+Event Management System frontend untuk tugas kelompok: React + Vite (JavaScript), Tailwind CSS 4 melalui `@tailwindcss/vite`, shadcn/ui, React Router Declarative Mode, Fetch, Context + useState, dan localStorage. Tidak ada backend atau database.
+
+## Fitur
+
+- Landing page, pencarian judul event, dan filter kategori.
+- Detail event dan registrasi peserta dengan validasi email, duplikasi, kapasitas, dan tanggal event. Registrasi dinonaktifkan untuk event yang sudah berakhir.
+- Tiket digital berisi informasi peserta, status Registered/Checked In, serta QR code dengan payload hanya `ticketId`.
+- Login admin dummy, dashboard statistik, CRUD event, dan konfirmasi hapus melalui AlertDialog.
+- Daftar peserta dengan pencarian, QR scanner kamera/gambar, dan check-in manual melalui `checkInTicket()` yang sama. Dukungan scanner mengikuti API browser; gunakan localhost/HTTPS untuk kamera atau input manual jika tidak didukung.
 
 ## Setup
 
@@ -16,12 +24,25 @@ npm run preview
 
 Pada PowerShell yang memblokir `npm.ps1`, gunakan `npm.cmd` sebagai pengganti `npm`.
 
+UI memakai light theme teal. Komponen shadcn lokal: Button, Card, Input, Label, Badge, dan AlertDialog di `src/components/ui/`. Konfigurasi `components.json` menggunakan `tsx: false`; alias `@/` mengarah ke `src/` melalui `jsconfig.json` dan `vite.config.js`.
+
+## Login demo
+
+Buka `/login`, gunakan username **admin** dan password **admin123**. Seluruh `/creator` dan turunannya dilindungi satu route guard. Satu state `isAdmin` di `App.jsx` membaca `sessionStorage['salmanesia-admin'] === 'true'`, sehingga login bertahan setelah refresh selama sesi tab aktif. Logout menghapus key dan kembali ke `/`.
+
+Attendee tetap publik dan tidak membutuhkan akun. Login ini hanya simulasi frontend, bukan mekanisme keamanan produksi.
+
 ## Struktur
 
 ```text
 public/mock/data.json
 src/
-  components/Navbar.jsx
+  components/
+    ui/                     # enam komponen shadcn
+    Navbar.jsx
+    EventCard.jsx
+    TicketCard.jsx
+    QrScanner.jsx
   context/AppDataContext.jsx
   pages/
     LandingPage.jsx
@@ -31,6 +52,7 @@ src/
     CreatorDashboardPage.jsx
     EventEditorPage.jsx
     ParticipantsPage.jsx
+    LoginPage.jsx
     NotFoundPage.jsx
   assets/                   # aset starter yang sudah ada
   App.jsx
@@ -43,16 +65,17 @@ src/
 | Route                                   | Halaman                                      |
 | --------------------------------------- | -------------------------------------------- |
 | `/`                                     | LandingPage                                  |
-| `/events`                               | ExploreEventsPage; daftar judul dari Context |
+| `/events`                               | ExploreEventsPage; search dan filter kategori |
 | `/events/:eventId`                      | EventDetailPage                              |
 | `/tickets`                              | MyTicketsPage                                |
+| `/login`                                | LoginPage                                    |
 | `/creator`                              | CreatorDashboardPage                         |
 | `/creator/events/new`                   | EventEditorPage (create)                     |
 | `/creator/events/:eventId/edit`         | EventEditorPage (edit)                       |
 | `/creator/events/:eventId/participants` | ParticipantsPage                             |
 | URL lainnya                             | NotFoundPage                                 |
 
-Attendee dan Creator hanya navigasi, tanpa role state atau autentikasi. Hosting produksi perlu mengarahkan route frontend ke `index.html` agar direct URL/refresh bekerja.
+Hosting produksi perlu mengarahkan route frontend ke `index.html` agar direct URL/refresh bekerja.
 
 ## Kontrak data bersama
 
@@ -74,7 +97,7 @@ Root JSON dan localStorage: `{ events: [], registrations: [] }`. Seed berisi 8 e
 }
 ```
 
-ID data baru menggunakan `crypto.randomUUID()`; jangan mengasumsikan prefix ID. Timestamp baru memakai ISO UTC. `date` dan `startTime` adalah waktu lokal; registrasi masih diizinkan pada hari event dan ditolak jika tanggal sudah lewat menurut browser. QR nantinya memakai `ticketId`. Status check-in diturunkan dari `checkedInAt !== null`. Jumlah peserta dan sisa kapasitas dihitung dari registrasi, tidak disimpan di event.
+ID data baru menggunakan `crypto.randomUUID()`; jangan mengasumsikan prefix ID. Timestamp baru memakai ISO UTC. `date` dan `startTime` adalah waktu lokal; registrasi masih diizinkan pada hari event dan ditolak jika tanggal sudah lewat menurut browser. `QRCodeSVG` dari `qrcode.react` memakai hanya `ticketId`, tanpa URL atau data pribadi. Status check-in diturunkan dari `checkedInAt !== null`. Jumlah peserta dan sisa kapasitas dihitung dari registrasi, tidak disimpan di event.
 
 ## Context dan actions
 
@@ -119,20 +142,12 @@ Satu key: `salmanesia-data-v1`, menyimpan events dan registrations bersama. Inis
 
 Untuk reset demo, hapus **hanya** key `salmanesia-data-v1` melalui browser DevTools lalu refresh. Data tersimpan tidak otomatis mengikuti perubahan seed. Persistence berlaku pada browser/origin yang sama, tanpa sinkronisasi antar-tab atau backend.
 
-## Pemeriksaan sederhana
+## Verifikasi
 
-Build dan lint: `npm run build` dan `npm run lint`.
+Jalankan `npm run lint` dan `npm run build`. Warning lama `react(set-state-in-effect)` pada pengisian form edit di `EventEditorPage.jsx` masih ada; build tetap berjalan.
 
-Untuk memeriksa Context tanpa menambahkan framework testing:
+## Catatan tim
 
-```sh
-npm run dev -- --host 127.0.0.1 --port 5174 --strictPort
-```
+Kerjakan fitur di file halaman masing-masing dan gunakan Context yang sama. Sepakati perubahan kontrak data, routes, Navbar, atau Context sebelum mengubah file bersama. Editor create/edit tetap satu komponen. Jangan menambah localStorage per halaman, statistik tersimpan, atau mekanisme autentikasi baru. Penghapusan event melalui dashboard juga menghapus registrasi dan tiket terkait setelah konfirmasi.
 
-Cek UI: buka semua route pada tabel (gunakan `evt-001`), klik navigasi Attendee/Creator, refresh `/events`, dan periksa tampilan pada layar sempit. `/events` harus menampilkan 8 judul pada origin baru. Setelah perubahan melalui actions, refresh dan pastikan nilai tersimpan tetap sama.
-
-## Kerja paralel Phase 2
-
-Kerjakan fitur di file halaman masing-masing dan gunakan Context yang sama. Sepakati perubahan kontrak data, routes, Navbar, atau Context sebelum mengubah file bersama. Editor create/edit tetap satu komponen. Jangan menambah localStorage per halaman, role/auth, backend, atau statistik tersimpan. UI formulir, dashboard, tiket QR, dan scanner belum diimplementasikan.
-
-Referensi setup: [Tailwind Vite](https://tailwindcss.com/docs/installation/using-vite) dan [React Router Declarative](https://reactrouter.com/start/declarative/installation).
+Referensi setup: [Tailwind Vite](https://tailwindcss.com/docs/installation/using-vite), [React Router Declarative](https://reactrouter.com/start/declarative/installation), dan [shadcn untuk Vite](https://ui.shadcn.com/docs/installation/vite).

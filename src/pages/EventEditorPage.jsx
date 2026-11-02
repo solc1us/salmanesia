@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { useAppData } from '../context/AppDataContext.jsx'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 const categories = ['Seminar', 'Workshop', 'Musik', 'Olahraga', 'Seni', 'Kuliner', 'Sosial', 'Kompetisi', 'Komunitas', 'Lainnya']
 const today = () => {
@@ -85,74 +89,76 @@ export default function EventEditorPage() {
     }
   }
 
-  if (loading) return <p role="status">Memuat data event...</p>
-  if (error) return <p role="alert" className="text-red-700">{error}</p>
+  if (loading) return <p role="status" className="rounded-xl border border-slate-200 bg-white p-6">Memuat data event...</p>
+  if (error) return <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-800">{error}</p>
   if (eventId && !event) return (
-    <section>
+    <section className="rounded-xl border border-slate-200 bg-white p-8 text-center">
       <h1>Event tidak ditemukan</h1>
       <p>Event mungkin sudah dihapus atau tautannya tidak valid.</p>
-      <Link to="/creator" className="mt-4 inline-block text-teal-800 hover:underline">Kembali ke dashboard</Link>
+      <Button asChild variant="outline" className="mt-6 min-h-11"><Link to="/creator">Kembali ke dashboard</Link></Button>
     </section>
   )
 
-  const fieldClass = 'mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2'
+  const fieldClass = 'mt-2 min-h-11 w-full rounded-md border border-input bg-white px-3 py-2 text-base outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 md:text-sm'
   return (
-    <section className="mx-auto max-w-2xl">
-      <Link to="/creator" className="text-sm font-medium text-teal-800 hover:underline">← Kembali ke dashboard</Link>
-      <h1 className="mt-4">{eventId ? 'Edit Event' : 'Buat Event'}</h1>
-      <p className="mb-6">{eventId ? 'Perbarui informasi event.' : 'Isi informasi untuk membuat event baru.'}</p>
+    <section aria-labelledby="editor-title" className="mx-auto max-w-3xl">
+      <Button asChild variant="ghost" className="mb-4 min-h-11"><Link to="/creator">← Kembali ke dashboard</Link></Button>
+      <h1 id="editor-title" className="tracking-tight">{eventId ? 'Edit Event' : 'Buat Event'}</h1>
+      <p className="mb-8 leading-7">{eventId ? 'Perbarui informasi event.' : 'Isi informasi untuk membuat event baru.'}</p>
 
-      {formError && <p role="alert" className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-800">{formError}</p>}
-      <form onSubmit={submit} className="space-y-4 rounded-xl border border-slate-200 bg-white p-5 sm:p-6">
-        <div>
-          <label htmlFor="title" className="block text-sm font-medium">Judul event *</label>
-          <input id="title" name="title" value={form.title} onChange={change} required maxLength={120} className={fieldClass} />
-        </div>
-        <div>
-          <label htmlFor="category" className="block text-sm font-medium">Kategori *</label>
-          <select id="category" name="category" value={form.category} onChange={change} required className={fieldClass}>
-            <option value="">Pilih kategori</option>
-            {categories.map((category) => <option key={category} value={category}>{category}</option>)}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium">Deskripsi *</label>
-          <textarea id="description" name="description" value={form.description} onChange={change} required rows={4} className={fieldClass} />
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2">
+      {formError && <p id="event-form-error" role="alert" className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">{formError}</p>}
+      <Card className="gap-0 py-0 shadow-none">
+        <form onSubmit={submit} aria-describedby={formError ? 'event-form-error' : undefined} className="space-y-5 p-5 sm:p-8">
           <div>
-            <label htmlFor="location" className="block text-sm font-medium">Lokasi / venue *</label>
-            <input id="location" name="location" value={form.location} onChange={change} required className={fieldClass} />
+            <Label htmlFor="title">Judul event *</Label>
+            <Input id="title" name="title" value={form.title} onChange={change} required maxLength={120} className={fieldClass} />
           </div>
           <div>
-            <label htmlFor="city" className="block text-sm font-medium">Kota *</label>
-            <input id="city" name="city" value={form.city} onChange={change} required className={fieldClass} />
+            <Label htmlFor="category">Kategori *</Label>
+            <select id="category" name="category" value={form.category} onChange={change} required className={fieldClass}>
+              <option value="">Pilih kategori</option>
+              {categories.map((category) => <option key={category} value={category}>{category}</option>)}
+            </select>
           </div>
           <div>
-            <label htmlFor="date" className="block text-sm font-medium">Tanggal event *</label>
-            <input id="date" type="date" name="date" min={today()} value={form.date} onChange={change} required className={fieldClass} />
+            <Label htmlFor="description">Deskripsi *</Label>
+            <textarea id="description" name="description" value={form.description} onChange={change} required rows={4} className={fieldClass} />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label htmlFor="location">Lokasi / venue *</Label>
+              <Input id="location" name="location" value={form.location} onChange={change} required className={fieldClass} />
+            </div>
+            <div>
+              <Label htmlFor="city">Kota *</Label>
+              <Input id="city" name="city" value={form.city} onChange={change} required className={fieldClass} />
+            </div>
+            <div>
+              <Label htmlFor="date">Tanggal event *</Label>
+              <Input id="date" type="date" name="date" min={today()} value={form.date} onChange={change} required className={fieldClass} />
+            </div>
+            <div>
+              <Label htmlFor="startTime">Waktu mulai *</Label>
+              <Input id="startTime" type="time" name="startTime" value={form.startTime} onChange={change} required className={fieldClass} />
+            </div>
           </div>
           <div>
-            <label htmlFor="startTime" className="block text-sm font-medium">Waktu mulai *</label>
-            <input id="startTime" type="time" name="startTime" value={form.startTime} onChange={change} required className={fieldClass} />
+            <Label htmlFor="image">URL cover image <span className="font-normal text-slate-500">(opsional)</span></Label>
+            <Input id="image" type="url" name="image" value={form.image} onChange={change} placeholder="https://..." className={fieldClass} />
           </div>
-        </div>
-        <div>
-          <label htmlFor="image" className="block text-sm font-medium">URL cover image <span className="font-normal text-slate-500">(opsional)</span></label>
-          <input id="image" type="url" name="image" value={form.image} onChange={change} placeholder="https://..." className={fieldClass} />
-        </div>
-        <div>
-          <label htmlFor="capacity" className="block text-sm font-medium">Kapasitas peserta *</label>
-          <input id="capacity" type="number" name="capacity" min={Math.max(1, participantCount)} step="1" value={form.capacity} onChange={change} required className={fieldClass} />
-          {eventId && <p className="mt-1 text-xs">Peserta terdaftar saat ini: {participantCount}.</p>}
-        </div>
-        <div className="flex flex-col-reverse gap-3 border-t border-slate-100 pt-4 sm:flex-row sm:justify-end">
-          <Link to="/creator" className="rounded-lg border border-slate-300 px-4 py-2 text-center font-medium hover:bg-slate-50">Batal</Link>
-          <button type="submit" disabled={saving} className="rounded-lg bg-teal-700 px-4 py-2 font-medium text-white hover:bg-teal-800 disabled:cursor-not-allowed disabled:opacity-60">
-            {saving ? 'Menyimpan...' : eventId ? 'Simpan Perubahan' : 'Buat Event'}
-          </button>
-        </div>
-      </form>
+          <div>
+            <Label htmlFor="capacity">Kapasitas peserta *</Label>
+            <Input id="capacity" type="number" name="capacity" min={Math.max(1, participantCount)} step="1" value={form.capacity} onChange={change} required aria-describedby={eventId ? 'capacity-help' : undefined} className={fieldClass} />
+            {eventId && <p id="capacity-help" className="mt-2 text-xs">Peserta terdaftar saat ini: {participantCount}.</p>}
+          </div>
+          <div className="flex flex-col-reverse gap-3 border-t border-slate-100 pt-6 sm:flex-row sm:justify-end">
+            <Button asChild variant="outline" className="min-h-11 bg-white"><Link to="/creator">Batal</Link></Button>
+            <Button type="submit" disabled={saving} className="min-h-11">
+              {saving ? 'Menyimpan...' : eventId ? 'Simpan Perubahan' : 'Buat Event'}
+            </Button>
+          </div>
+        </form>
+      </Card>
     </section>
   )
 }
