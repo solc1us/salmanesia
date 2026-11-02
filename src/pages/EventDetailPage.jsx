@@ -1,6 +1,11 @@
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { useAppData } from '../context/AppDataContext.jsx'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 function formatDate(date, startTime) {
   return new Intl.DateTimeFormat('id-ID', {
@@ -49,7 +54,7 @@ export default function EventDetailPage() {
       <section className="rounded-xl bg-white p-8 text-center">
         <h1>Event tidak ditemukan</h1>
         <p>Event ini mungkin sudah dihapus atau tautannya tidak valid.</p>
-        <Link to="/events" className="mt-6 inline-flex min-h-11 items-center rounded-lg bg-teal-700 px-5 py-2 font-semibold text-white hover:bg-teal-800">Kembali ke event</Link>
+        <Button asChild className="mt-6 min-h-11"><Link to="/events">Kembali ke event</Link></Button>
       </section>
     )
   }
@@ -57,74 +62,78 @@ export default function EventDetailPage() {
   const isPast = event.date < today
 
   return (
-    <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
-      <article className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        {event.image ? (
-          <img src={event.image} alt={`Poster ${event.title}`} className="h-64 w-full object-cover sm:h-80" />
-        ) : (
-          <div className="flex h-64 items-end bg-gradient-to-br from-teal-700 via-cyan-700 to-sky-500 p-8 sm:h-80">
-            <span className="rounded-full bg-white/20 px-4 py-2 font-semibold text-white backdrop-blur">{event.category}</span>
-          </div>
-        )}
-        <div className="p-6 sm:p-8">
-          <span className="rounded-full bg-teal-50 px-3 py-1 text-sm font-semibold text-teal-800">{event.category}</span>
-          <h1 className="mt-4 tracking-tight">{event.title}</h1>
-          <dl className="mt-8 grid gap-5 sm:grid-cols-2">
-            <div>
-              <dt className="text-sm font-medium text-slate-500">Tanggal & waktu</dt>
-              <dd className="mt-1 font-semibold text-slate-900">{formatDate(event.date, event.startTime)}</dd>
+    <section className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <article className="min-w-0">
+        <Card className="gap-0 overflow-hidden py-0 shadow-none">
+          {event.image ? (
+            <img src={event.image} alt={`Poster ${event.title}`} className="h-64 w-full object-cover sm:h-80" />
+          ) : (
+            <div className="flex h-64 items-center justify-center bg-gradient-to-br from-teal-900 to-teal-600 p-8 sm:h-80">
+              <span aria-hidden="true" className="text-center text-4xl font-bold tracking-tight text-white/90 break-words">{event.category}</span>
             </div>
-            <div>
-              <dt className="text-sm font-medium text-slate-500">Lokasi</dt>
-              <dd className="mt-1 font-semibold text-slate-900">{event.location}, {event.city}</dd>
+          )}
+          <CardContent className="p-6 sm:p-8">
+            <Badge variant="secondary" className="px-3 py-1">{event.category}</Badge>
+            <h1 className="mt-4 text-3xl leading-tight tracking-tight break-words sm:text-4xl">{event.title}</h1>
+            <dl className="mt-8 grid gap-5 sm:grid-cols-2">
+              <div>
+                <dt className="text-sm font-medium text-slate-500">Tanggal & waktu</dt>
+                <dd className="mt-1 font-semibold text-slate-900">{formatDate(event.date, event.startTime)}</dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-slate-500">Lokasi</dt>
+                <dd className="mt-1 font-semibold text-slate-900">{event.location}, {event.city}</dd>
+              </div>
+            </dl>
+            <div className="mt-8 border-t border-slate-200 pt-8">
+              <h2 className="text-xl font-bold text-slate-900">Tentang event</h2>
+              <p className="mt-3 leading-7">{event.description}</p>
             </div>
-          </dl>
-          <div className="mt-8 border-t border-slate-200 pt-8">
-            <h2 className="text-xl font-bold text-slate-900">Tentang event</h2>
-            <p className="mt-3 leading-7">{event.description}</p>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </article>
 
-      <aside className="h-fit rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:sticky lg:top-6">
-        {registered ? (
-          <div role="status">
-            <span className="inline-flex rounded-full bg-teal-100 px-3 py-1 text-sm font-semibold text-teal-800">Pendaftaran berhasil</span>
-            <h2 className="mt-4 text-xl font-bold text-slate-900">Tiketmu sudah terbit.</h2>
-            <p className="mt-2">Lihat tiket digital dan QR code-mu di halaman Tiket Saya.</p>
-            <Link to="/tickets" className="mt-6 inline-flex min-h-11 items-center rounded-lg bg-teal-700 px-5 py-2 font-semibold text-white hover:bg-teal-800">Lihat Tiket Saya</Link>
-          </div>
-        ) : (
-          <>
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="text-sm text-slate-500">Tiket</p>
-                <p className="text-xl font-bold text-slate-900">Gratis</p>
-              </div>
-              <span className={`rounded-full px-3 py-1 text-sm font-semibold ${isFull ? 'bg-red-50 text-red-700' : 'bg-teal-50 text-teal-800'}`}>
-                {isFull ? 'Penuh' : `${remainingCapacity} kursi`}
-              </span>
+      <aside className="min-w-0 lg:sticky lg:top-6">
+        <Card className="gap-0 p-6 shadow-sm">
+          {registered ? (
+            <div role="status">
+              <Badge variant="secondary" className="px-3 py-1">Pendaftaran berhasil</Badge>
+              <h2 className="mt-4 text-xl font-bold text-slate-900">Tiketmu sudah terbit.</h2>
+              <p className="mt-2">Lihat tiket digital dan QR code-mu di halaman Tiket Saya.</p>
+              <Button asChild className="mt-6 min-h-11 w-full"><Link to="/tickets">Lihat Tiket Saya</Link></Button>
             </div>
-            <form className="mt-6 border-t border-slate-200 pt-6" onSubmit={submitRegistration} noValidate>
-              <h2 className="text-lg font-bold text-slate-900">Daftar event</h2>
-              {isPast && <p className="mt-4 text-sm font-medium text-slate-600">Event sudah berakhir</p>}
-              <div className="mt-4 space-y-4">
+          ) : (
+            <>
+              <div className="flex items-center justify-between gap-3">
                 <div>
-                  <label htmlFor="participant-name" className="mb-1.5 block text-sm font-medium text-slate-700">Nama lengkap</label>
-                  <input id="participant-name" required value={form.participantName} onChange={(inputEvent) => setForm({ ...form, participantName: inputEvent.target.value })} className="min-h-11 w-full rounded-lg border border-slate-300 px-3 focus:border-teal-700 focus:outline-none" />
+                  <p className="text-sm text-slate-500">Tiket</p>
+                  <p className="mt-1 text-3xl font-bold tracking-tight text-slate-900">Gratis</p>
                 </div>
-                <div>
-                  <label htmlFor="participant-email" className="mb-1.5 block text-sm font-medium text-slate-700">Email</label>
-                  <input id="participant-email" type="email" required value={form.participantEmail} onChange={(inputEvent) => setForm({ ...form, participantEmail: inputEvent.target.value })} className="min-h-11 w-full rounded-lg border border-slate-300 px-3 focus:border-teal-700 focus:outline-none" />
-                </div>
+                <Badge variant={isFull ? 'destructive' : 'secondary'} className="px-3 py-1">
+                  {isFull ? 'Penuh' : `${remainingCapacity} kursi`}
+                </Badge>
               </div>
-              {formError && <p role="alert" className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-800">{formError}</p>}
-              <button type="submit" disabled={isPast || isFull || isRegistering} className="mt-6 min-h-11 w-full rounded-lg bg-teal-700 px-5 py-2 font-semibold text-white hover:bg-teal-800 disabled:cursor-not-allowed disabled:bg-slate-300">
-                {isFull ? 'Event Penuh' : isRegistering ? 'Mendaftarkan...' : 'Daftar Gratis'}
-              </button>
-            </form>
-          </>
-        )}
+              <form className="mt-6 border-t border-slate-200 pt-6" onSubmit={submitRegistration} noValidate>
+                <h2 className="text-lg font-bold text-slate-900">Daftar event</h2>
+                {isPast && <p id="event-ended" className="mt-4 rounded-lg bg-slate-100 p-3 text-sm font-medium text-slate-700">Event sudah berakhir</p>}
+                <div className="mt-4 space-y-4">
+                  <div>
+                    <Label htmlFor="participant-name" className="mb-2">Nama lengkap</Label>
+                    <Input id="participant-name" autoComplete="name" required value={form.participantName} onChange={(inputEvent) => setForm({ ...form, participantName: inputEvent.target.value })} className="min-h-11 bg-white" />
+                  </div>
+                  <div>
+                    <Label htmlFor="participant-email" className="mb-2">Email</Label>
+                    <Input id="participant-email" type="email" autoComplete="email" required value={form.participantEmail} onChange={(inputEvent) => setForm({ ...form, participantEmail: inputEvent.target.value })} className="min-h-11 bg-white" />
+                  </div>
+                </div>
+                {formError && <p role="alert" className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-800">{formError}</p>}
+                <Button type="submit" disabled={isPast || isFull || isRegistering} aria-describedby={isPast ? 'event-ended' : undefined} className="mt-6 min-h-11 w-full">
+                  {isFull ? 'Event Penuh' : isRegistering ? 'Mendaftarkan...' : 'Daftar Gratis'}
+                </Button>
+              </form>
+            </>
+          )}
+        </Card>
       </aside>
     </section>
   )
