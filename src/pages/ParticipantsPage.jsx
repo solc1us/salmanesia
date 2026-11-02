@@ -166,7 +166,7 @@ export default function ParticipantsPage() {
           {event.title}
         </h2>
 
-        <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2">
+        <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2 xl:grid-cols-4">
           <div>
             <dt className="text-slate-600">Lokasi</dt>
             <dd className="mt-1 font-medium break-words">{event.location}, {event.city}</dd>

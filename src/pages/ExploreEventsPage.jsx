@@ -77,7 +77,7 @@ export default function ExploreEventsPage() {
       ) : (
         <>
           <p className="mt-6 text-sm text-slate-600">{filteredEvents.length} event ditemukan</p>
-          <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredEvents.map((event) => (
               <EventCard
                 key={event.id}

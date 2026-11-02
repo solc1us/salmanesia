@@ -70,3 +70,74 @@
     @apply outline-2 outline-offset-4 outline-teal-700;
   }
 }
+
+.hero-copy {
+  animation: hero-reveal 650ms ease-out both;
+}
+
+.hero-poster {
+  position: absolute;
+  width: 43%;
+  border-radius: 0.75rem;
+  transform: rotate(var(--poster-tilt));
+  box-shadow: 0 12px 24px rgb(15 23 42 / 0.14);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+  animation: hero-float var(--float-duration) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+}
+
+.hero-poster-0 {
+  top: 5%;
+  left: 22%;
+  z-index: 20;
+  width: 60%;
+  --poster-tilt: -3deg;
+  --float-duration: 8s;
+}
+
+.hero-poster-1 {
+  top: 22%;
+  left: 1%;
+  --poster-tilt: -11deg;
+  --float-duration: 10s;
+  --float-delay: -3s;
+}
+
+.hero-poster-2 {
+  top: 18%;
+  right: 1%;
+  --poster-tilt: 10deg;
+  --float-duration: 12s;
+  --float-delay: -5s;
+}
+
+.hero-poster:hover,
+.hero-poster:focus-within {
+  z-index: 30;
+  animation-play-state: paused;
+  transform: rotate(0deg) scale(1.025);
+  box-shadow: 0 16px 32px rgb(15 23 42 / 0.2);
+}
+
+@keyframes hero-reveal {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hero-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-copy,
+  .hero-poster {
+    animation: none;
+    transition: none;
+  }
+
+  .hero-poster:hover,
+  .hero-poster:focus-within {
+    transform: rotate(var(--poster-tilt));
+  }
+}

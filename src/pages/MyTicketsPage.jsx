@@ -23,7 +23,7 @@ export default function MyTicketsPage() {
           <Button asChild className="mx-auto mt-6 min-h-11"><Link to="/events">Jelajahi Event</Link></Button>
         </Card>
       ) : (
-        <ul className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {registrations.map((registration) => {
             const event = events.find((item) => item.id === registration.eventId)
 

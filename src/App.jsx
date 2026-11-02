@@ -32,7 +32,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Navbar isAdmin={isAdmin} onLogout={handleLogout} />
-      <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
+      <main className="mx-auto w-full min-w-0 max-w-[1440px] px-4 py-10 sm:px-6 lg:px-8 xl:px-10">
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/events" element={<ExploreEventsPage />} />

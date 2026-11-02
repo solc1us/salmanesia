@@ -82,7 +82,7 @@ export default function EventDetailPage() {
             </dl>
             <div className="mt-8 border-t border-slate-200 pt-8">
               <h2 className="text-xl font-bold text-slate-900">Tentang event</h2>
-              <p className="mt-3 leading-7">{event.description}</p>
+              <p className="mt-3 max-w-prose leading-7 break-words">{event.description}</p>
             </div>
           </CardContent>
         </Card>

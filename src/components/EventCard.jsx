@@ -18,7 +18,7 @@ export default function EventCard({ event, registeredCount = 0 }) {
     <article className="group min-w-0">
       <Card className="h-full gap-0 overflow-hidden border-slate-200 py-0 shadow-none hover:border-teal-300 hover:shadow-sm">
         <Link to={`/events/${event.id}`} className="flex h-full flex-col rounded-xl focus-visible:outline-offset-[-4px]">
-          <EventCover event={event} />
+          <EventCover event={event} className="aspect-[4/5] max-h-[28rem] shrink-0" />
           <CardContent className="flex flex-1 flex-col p-5">
             <div className="mb-3 flex items-center justify-between gap-3">
               <Badge variant="secondary">

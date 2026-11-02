@@ -26,7 +26,7 @@ export default function Navbar({ isAdmin, onLogout }) {
 
   return (
     <header className="border-b border-slate-200 bg-white">
-      <nav aria-label="Navigasi utama" className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-3 px-4 py-3 sm:px-6 lg:flex-nowrap">
+      <nav aria-label="Navigasi utama" className="mx-auto flex w-full max-w-[1440px] flex-wrap items-center justify-between gap-x-4 gap-y-3 px-4 py-3 sm:px-6 lg:flex-nowrap lg:px-8 xl:px-10">
         <Link to="/" onClick={closeMenu} className="flex shrink-0 items-center">
           <img src="/branding/salmanesia-logo.png" alt="Salmanesia" width="1747" height="440" className="h-10 w-auto sm:h-11" />
         </Link>

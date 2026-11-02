@@ -1,9 +1,9 @@
 import { Link } from 'react-router'
 import EventCard from '../components/EventCard.jsx'
+import EventCover from '../components/EventCover.jsx'
 import { useAppData } from '../context/AppDataContext.jsx'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 
 export default function LandingPage() {
   const { events, registrations, loading, error } = useAppData()
@@ -13,17 +13,17 @@ export default function LandingPage() {
 
   return (
     <div className="space-y-8 pb-4 sm:space-y-10">
-      <section className="grid items-center gap-6 rounded-2xl border border-teal-100 bg-teal-50 p-5 sm:p-6 lg:grid-cols-[1.15fr_1fr] lg:gap-8 lg:p-8">
-        <div className="min-w-0">
-          <Badge variant="outline" className="border-teal-200 bg-white px-3 py-1 text-teal-800">Event kampus & komunitas</Badge>
-          <h1 className="mt-4 max-w-xl text-3xl leading-tight font-bold tracking-tight text-slate-950 sm:text-4xl">
-            Temukan event.<br />Mulai cerita baru.
+      <section aria-labelledby="hero-title" className="relative isolate grid items-center gap-6 overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-br from-teal-50 via-white to-teal-100/80 p-5 sm:p-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-10 lg:p-8 xl:px-10">
+        <div className="hero-copy relative z-10 min-w-0">
+          <Badge variant="outline" className="border-teal-200 bg-white/80 px-3 py-1 text-teal-800">Event kampus & komunitas</Badge>
+          <h1 id="hero-title" className="mt-5 max-w-xl font-heading text-3xl leading-[1.15] font-bold tracking-tight text-slate-950 sm:text-4xl lg:text-5xl xl:text-[3.5rem]">
+            Temukan event.<br /><span className="text-teal-800">Mulai cerita baru.</span>
           </h1>
-          <p className="mt-4 max-w-lg text-base leading-7 text-slate-600">
+          <p className="mt-5 max-w-md text-base leading-7 text-slate-600">
             Cari kegiatan yang kamu suka, daftar gratis, dan simpan tiket digitalmu di Salmanesia.
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <Button asChild size="lg" className="min-h-11"><Link to="/events">
+            <Button asChild size="lg" className="min-h-11 shadow-sm"><Link to="/events">
               Jelajahi Event
             </Link></Button>
             <Button asChild size="lg" variant="outline" className="min-h-11 bg-white"><Link to="/creator">
@@ -31,34 +31,25 @@ export default function LandingPage() {
             </Link></Button>
           </div>
         </div>
-        {heroEvent ? (
-          <article className="mx-auto w-full min-w-0 max-w-sm">
-            <Card className="gap-0 overflow-hidden py-0 shadow-sm">
-              <Link to={`/events/${heroEvent.id}`} className="group block rounded-xl focus-visible:outline-offset-[-4px]">
-                {heroEvent.image ? (
-                  <img src={heroEvent.image} alt="" className="h-32 w-full object-cover sm:h-36" />
-                ) : (
-                  <div aria-hidden="true" className="flex h-32 items-center justify-center bg-gradient-to-br from-teal-900 to-teal-600 p-4 sm:h-36">
-                    <span className="text-center text-2xl font-bold text-white break-words">{heroEvent.category}</span>
-                  </div>
-                )}
-                <CardContent className="p-4 sm:p-5">
-                  <Badge variant="secondary">{heroEvent.category}</Badge>
-                  <h2 className="mt-3 text-lg leading-snug font-bold text-slate-900 group-hover:text-teal-800 break-words">{heroEvent.title}</h2>
-                  <p className="mt-2 text-sm font-medium text-teal-800">
-                    {new Date(`${heroEvent.date}T${heroEvent.startTime}`).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })}
-                  </p>
-                  <p className="mt-1 text-sm text-slate-600 break-words">{heroEvent.location}, {heroEvent.city}</p>
-                </CardContent>
-              </Link>
-            </Card>
-          </article>
-        ) : (
-          <div className="rounded-xl border border-dashed border-teal-200 bg-white/70 p-6">
-            <h2 className="text-xl font-semibold text-teal-900">Pengalaman baru menantimu</h2>
-            <p className="mt-3 text-sm leading-6">Temukan kegiatan kampus dan komunitas yang sesuai dengan minatmu.</p>
-          </div>
-        )}
+        <div className="relative mx-auto w-full min-w-0 max-w-sm lg:max-w-md xl:max-w-lg">
+          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-1/2 aspect-square -translate-y-1/2 rounded-full border border-teal-200/70 bg-teal-100/40" />
+          {heroEvent ? (
+            <ul aria-label="Pilihan event" className="relative aspect-[6/5]">
+              {featuredEvents.map((event, index) => (
+                <li key={event.id} className={`hero-poster hero-poster-${index} ${index === 2 ? 'hidden sm:block' : ''}`}>
+                  <Link to={`/events/${event.id}`} aria-label={`Lihat event ${event.title}`} className="block rounded-xl border border-white bg-white p-1 focus-visible:outline-offset-4">
+                    <EventCover event={event} className="aspect-[4/5] rounded-lg" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="relative flex aspect-[6/5] flex-col justify-center px-6 text-center">
+              <h2 className="text-2xl leading-snug font-semibold text-teal-900">Pengalaman baru menantimu</h2>
+              <p className="mt-3 text-sm leading-6">Temukan kegiatan kampus dan komunitas yang sesuai dengan minatmu.</p>
+            </div>
+          )}
+        </div>
       </section>
 
       <section aria-labelledby="featured-events-title">
