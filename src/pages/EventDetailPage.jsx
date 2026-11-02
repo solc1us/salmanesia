@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router'
-import TicketValidationModal from '../components/TicketValidationModal.jsx'
 import { useAppData } from '../context/AppDataContext.jsx'
 
 function formatDate(date, startTime) {
@@ -18,7 +17,10 @@ export default function EventDetailPage() {
   const [formError, setFormError] = useState('')
   const [isRegistering, setIsRegistering] = useState(false)
   const [registered, setRegistered] = useState(false)
-  const [showValidationModal, setShowValidationModal] = useState(false)
+  const [today] = useState(() => {
+    const now = new Date()
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+  })
   const registeredCount = useMemo(
     () => registrations.filter((registration) => registration.eventId === eventId).length,
     [registrations, eventId],
@@ -51,6 +53,8 @@ export default function EventDetailPage() {
       </section>
     )
   }
+
+  const isPast = event.date < today
 
   return (
     <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
@@ -103,6 +107,7 @@ export default function EventDetailPage() {
             </div>
             <form className="mt-6 border-t border-slate-200 pt-6" onSubmit={submitRegistration} noValidate>
               <h2 className="text-lg font-bold text-slate-900">Daftar event</h2>
+              {isPast && <p className="mt-4 text-sm font-medium text-slate-600">Event sudah berakhir</p>}
               <div className="mt-4 space-y-4">
                 <div>
                   <label htmlFor="participant-name" className="mb-1.5 block text-sm font-medium text-slate-700">Nama lengkap</label>
@@ -114,19 +119,13 @@ export default function EventDetailPage() {
                 </div>
               </div>
               {formError && <p role="alert" className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-800">{formError}</p>}
-              <button type="submit" disabled={isFull || isRegistering} className="mt-6 min-h-11 w-full rounded-lg bg-teal-700 px-5 py-2 font-semibold text-white hover:bg-teal-800 disabled:cursor-not-allowed disabled:bg-slate-300">
+              <button type="submit" disabled={isPast || isFull || isRegistering} className="mt-6 min-h-11 w-full rounded-lg bg-teal-700 px-5 py-2 font-semibold text-white hover:bg-teal-800 disabled:cursor-not-allowed disabled:bg-slate-300">
                 {isFull ? 'Event Penuh' : isRegistering ? 'Mendaftarkan...' : 'Daftar Gratis'}
               </button>
             </form>
           </>
         )}
-        <button type="button" onClick={() => setShowValidationModal(true)} className="mt-6 min-h-11 w-full rounded-lg border border-slate-300 px-5 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
-          Validasi Tiket Manual
-        </button>
       </aside>
-      {showValidationModal && (
-        <TicketValidationModal activeEventId={event.id} onClose={() => setShowValidationModal(false)} />
-      )}
     </section>
   )
 }
